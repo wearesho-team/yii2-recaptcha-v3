@@ -103,13 +103,18 @@ class Behavior extends base\Behavior
 
     /**
      * @param base\ActionEvent $event
+     *
      * @throws web\HttpException
      *
      */
     public function beforeAction(base\ActionEvent $event): void
     {
-        if (is_null($this->actions) || !in_array($event->action->id, $this->actions, true)) {
-            return;
+        if (is_null($this->actions)) {
+            if (!in_array($event->action->id, array_keys($this->actions ?? []))
+                || !in_array(strtolower($this->request->method), $this->actions[$event->action->id])
+            ) {
+                return;
+            }
         }
 
         $token = $this->request->headers->get($this->header);
@@ -139,7 +144,7 @@ class Behavior extends base\Behavior
         }
 
         $needleCaptchaAction = mb_strtolower(
-            "{$event->action->id}-{$event->action->controller->id}-{$this->request->method}"
+            "{$event->action->controller->id}-{$event->action->id}-{$this->request->method}"
         );
         if ($needleCaptchaAction !== $response->getAction()) {
             $this->invalidAction($response);
@@ -160,6 +165,7 @@ class Behavior extends base\Behavior
 
     /**
      * @param ReCaptcha\V3\Exception $exception
+     *
      * @throws web\HttpException
      */
     protected function notSuccessful(ReCaptcha\V3\Exception $exception): void
@@ -173,6 +179,7 @@ class Behavior extends base\Behavior
 
     /**
      * @param ReCaptcha\V3\Response $response @
+     *
      * @throws web\HttpException
      */
     protected function tooLow(ReCaptcha\V3\Response $response): void
@@ -182,6 +189,7 @@ class Behavior extends base\Behavior
 
     /**
      * @param ReCaptcha\V3\Response $response @
+     *
      * @throws web\HttpException
      */
     protected function tooHigh(ReCaptcha\V3\Response $response): void
@@ -191,6 +199,7 @@ class Behavior extends base\Behavior
 
     /**
      * @param ReCaptcha\V3\Response $response @
+     *
      * @throws web\HttpException
      */
     protected function invalidHostName(ReCaptcha\V3\Response $response): void
@@ -200,6 +209,7 @@ class Behavior extends base\Behavior
 
     /**
      * @param ReCaptcha\V3\Response $response @
+     *
      * @throws web\HttpException
      */
     protected function invalidAction(ReCaptcha\V3\Response $response): void
@@ -210,6 +220,7 @@ class Behavior extends base\Behavior
     /**
      * @param ReCaptcha\V3\Response $response
      * @param int $code
+     *
      * @throws web\HttpException
      *
      */

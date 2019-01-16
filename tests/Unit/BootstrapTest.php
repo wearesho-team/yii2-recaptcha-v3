@@ -17,6 +17,7 @@ class BootstrapTest extends TestCase
 
     protected function setUp(): void
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->app = new Application([
             'id' => 'yii2-recaptcha-v3',
             'basePath' => dirname(dirname(__DIR__)),
