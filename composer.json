@@ -3,6 +3,7 @@
     "description": "reCAPTCHA v3 Yii2 Integration",
     "type": "library",
     "require": {
+        "php": "^7.1",
         "wearesho-team/recaptcha-v3": "^0.2.0",
         "yiisoft/yii2": "^2.0.15"
     },
@@ -27,7 +28,9 @@
     },
     "scripts": {
         "lint": "./vendor/bin/phpcs --standard=PSR2 ./src ./tests",
-        "test": "./vendor/bin/phpunit"
+        "phpcbf": "./vendor/bin/phpcbf --standard=PSR2 ./src ./tests",
+        "test": "./vendor/bin/phpunit",
+        "cover": "./vendor/bin/phpunit --coverage-clover=coverage.xml"
     },
     "autoload": {
         "psr-4": {
