@@ -1,0 +1,42 @@
+{
+    "name": "wearesho-team/yii2-recaptcha-v3",
+    "description": "reCAPTCHA v3 Yii2 Integration",
+    "type": "library",
+    "require": {
+        "wearesho-team/recaptcha-v3": "^0.2.0",
+        "yiisoft/yii2": "^2.0.15"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Letnikow",
+            "email": "reclamme@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "process-timeout": 1800,
+        "sort-packages": true,
+        "platform": {
+            "php": "7.1"
+        }
+    },
+    "scripts": {
+        "lint": "./vendor/bin/phpcs --standard=PSR2 ./src ./tests",
+        "test": "./vendor/bin/phpunit"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wearesho\\ReCaptcha\\V3\\Yii2\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wearesho\\ReCaptcha\\V3\\Yii2\\Tests\\": "tests/"
+        }
+    }
+}
