@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Wearesho\ReCaptcha;
 use Wearesho\ReCaptcha\V3;
 use yii\base;
-use yii\i18n\PhpMessageSource;
 use yii\web;
 
 /**
@@ -146,6 +145,7 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
+        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_MISSING_HEADER);
 
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
@@ -183,6 +183,7 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
+        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_TOO_LOW);
 
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
@@ -220,6 +221,7 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
+        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_NOT_SUCCESSFUL);
 
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
@@ -257,6 +259,7 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
+        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_INVALID_HOSTNAME);
 
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
@@ -294,6 +297,7 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
+        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_INVALID_ACTION);
 
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
@@ -331,6 +335,7 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
+        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_TOO_HIGH);
 
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
