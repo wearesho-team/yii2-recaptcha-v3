@@ -18,9 +18,9 @@ class Behavior extends base\Behavior
     public const ERROR_MISSING_HEADER = 21001;
     public const ERROR_NOT_SUCCESSFUL = 21002;
     public const ERROR_TOO_LOW = 21003;
-    public const ERROR_TOO_HIGH = 21003;
-    public const ERROR_INVALID_HOSTNAME = 21003;
-    public const ERROR_INVALID_ACTION = 21003;
+    public const ERROR_TOO_HIGH = 21004;
+    public const ERROR_INVALID_HOSTNAME = 21005;
+    public const ERROR_INVALID_ACTION = 21006;
 
     /**
      * Will be used to check reCAPTCHA token
