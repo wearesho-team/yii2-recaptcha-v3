@@ -607,4 +607,9 @@ class BehaviorTest extends TestCase
             $behavior->events()
         );
     }
+
+    protected function tearDown(): void
+    {
+        putenv('RECAPTCHA_SECRET');
+    }
 }
