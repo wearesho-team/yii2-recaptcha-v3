@@ -4,6 +4,7 @@
     "type": "library",
     "require": {
         "php": "^7.1",
+        "ext-mbstring": "*",
         "wearesho-team/recaptcha-v3": "^0.2.0",
         "yiisoft/yii2": "^2.0.15"
     },

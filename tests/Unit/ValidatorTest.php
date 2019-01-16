@@ -78,8 +78,16 @@ class ValidatorTest extends TestCase
 
     public function testFailedValidate(): void
     {
-        putenv('RECAPTCHA_SECRET=' . static::SECRET);
-        $validator = new V3\Yii2\Validator();
+        $validator = $this->createValidator();
+        $this->mock->append(
+            new GuzzleHttp\Psr7\Response(200, [], json_encode([
+                'success' => false,
+                'score' => 0,
+                'action' => 'test',
+                'challenge_ts' => date('c'),
+                'hostname' => 'wearesho.com',
+            ]))
+        );
 
         $this->assertFalse($validator->validate('hello'));
     }
