@@ -23,6 +23,7 @@ class ValidatorTest extends TestCase
     {
         putenv('RECAPTCHA_SECRET=' . static::SECRET);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         \Yii::$app = new web\Application([
             'id' => 'yii2-recaptcha-v3',
             'basePath' => dirname(dirname(__DIR__)),
@@ -59,6 +60,7 @@ class ValidatorTest extends TestCase
     {
         $validator = new V3\Yii2\Validator();
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->assertEquals($validator->client, \Yii::$container->get(V3\Client::class));
         $this->assertEquals($validator->request, \Yii::$app->request);
         $this->assertEquals($validator->message, 'Проверка reCAPTCHA не пройдена');
@@ -70,6 +72,7 @@ class ValidatorTest extends TestCase
         $validator = new V3\Yii2\Validator([
             'request' => null,
         ]);
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->assertEquals($validator->client, \Yii::$container->get(V3\Client::class));
         $this->assertNull($validator->request);
         $this->assertEquals($validator->message, 'Проверка reCAPTCHA не пройдена');
@@ -207,15 +210,19 @@ class ValidatorTest extends TestCase
 
     protected function createValidator(array $params = []): V3\Yii2\Validator
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         /** @var V3\Yii2\Validator $validator */
         $validator = \Yii::$container->get(
             V3\Yii2\Validator::class,
             [],
             [
+                /** @noinspection PhpUnhandledExceptionInspection */
                 'client' => \Yii::$container->get(
                     V3\Client::class,
                     [
+                        /** @noinspection PhpUnhandledExceptionInspection */
                         \Yii::$container->get(V3\EnvironmentConfig::class),
+                        /** @noinspection PhpUnhandledExceptionInspection */
                         \Yii::$container->get(GuzzleHttp\ClientInterface::class),
                     ]
                 ),

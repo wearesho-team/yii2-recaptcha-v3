@@ -5,7 +5,6 @@ namespace Wearesho\ReCaptcha\V3\Yii2\Tests\Unit;
 use GuzzleHttp;
 use PHPUnit\Framework\TestCase;
 use Wearesho\ReCaptcha;
-use Wearesho\ReCaptcha\V3;
 use yii\base;
 use yii\web;
 
@@ -34,11 +33,12 @@ class BehaviorTest extends TestCase
             ['handler' => $stack]
         ]);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         \Yii::$container->set(
-            V3\Client::class,
+            ReCaptcha\V3\Client::class,
             [],
             [
-                \Yii::$container->get(V3\EnvironmentConfig::class),
+                \Yii::$container->get(ReCaptcha\V3\EnvironmentConfig::class),
                 \Yii::$container->get(GuzzleHttp\ClientInterface::class),
             ]
         );
@@ -46,7 +46,7 @@ class BehaviorTest extends TestCase
 
     public function testSuccessBehavior(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -70,6 +70,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -85,7 +86,7 @@ class BehaviorTest extends TestCase
 
     public function testEmptyActions(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -106,6 +107,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -121,7 +123,7 @@ class BehaviorTest extends TestCase
 
     public function testEmptyToken(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -145,8 +147,9 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
-        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_MISSING_HEADER);
+        $this->expectExceptionCode(ReCaptcha\V3\Yii2\Behavior::ERROR_MISSING_HEADER);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -157,7 +160,7 @@ class BehaviorTest extends TestCase
 
     public function testTooLow(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -183,8 +186,9 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
-        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_TOO_LOW);
+        $this->expectExceptionCode(ReCaptcha\V3\Yii2\Behavior::ERROR_TOO_LOW);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -195,7 +199,7 @@ class BehaviorTest extends TestCase
 
     public function testNotVerify(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -221,8 +225,9 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
-        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_NOT_SUCCESSFUL);
+        $this->expectExceptionCode(ReCaptcha\V3\Yii2\Behavior::ERROR_NOT_SUCCESSFUL);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -233,7 +238,7 @@ class BehaviorTest extends TestCase
 
     public function testInvalidHostName(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -259,8 +264,9 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
-        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_INVALID_HOSTNAME);
+        $this->expectExceptionCode(ReCaptcha\V3\Yii2\Behavior::ERROR_INVALID_HOSTNAME);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -271,7 +277,7 @@ class BehaviorTest extends TestCase
 
     public function testInvalidAction(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -297,8 +303,9 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
-        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_INVALID_ACTION);
+        $this->expectExceptionCode(ReCaptcha\V3\Yii2\Behavior::ERROR_INVALID_ACTION);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -309,7 +316,7 @@ class BehaviorTest extends TestCase
 
     public function testTooHigh(): void
     {
-        $behavior = new V3\Yii2\Behavior([
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
             'request' => $request = new web\Request([
                 'methodParam' => 'get_method'
             ]),
@@ -335,8 +342,9 @@ class BehaviorTest extends TestCase
 
         $this->expectException(web\BadRequestHttpException::class);
         $this->expectExceptionMessage('reCAPTCHA challenge failed');
-        $this->expectExceptionCode(V3\Yii2\Behavior::ERROR_TOO_HIGH);
+        $this->expectExceptionCode(ReCaptcha\V3\Yii2\Behavior::ERROR_TOO_HIGH);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -357,7 +365,7 @@ class BehaviorTest extends TestCase
             'min' => 0.5,
             'max' => 1,
             'hostNames' => ['wearesho.com',],
-        ]) extends V3\Yii2\Behavior
+        ]) extends ReCaptcha\V3\Yii2\Behavior
         {
             protected function challengeFailed(): void
             {
@@ -375,6 +383,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -400,7 +409,7 @@ class BehaviorTest extends TestCase
             'min' => 0.5,
             'max' => 1,
             'hostNames' => ['wearesho.com',],
-        ]) extends V3\Yii2\Behavior
+        ]) extends ReCaptcha\V3\Yii2\Behavior
         {
             protected function validationError(ReCaptcha\V3\Response $response, int $code): void
             {
@@ -420,6 +429,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -445,7 +455,7 @@ class BehaviorTest extends TestCase
             'min' => 0.5,
             'max' => 0.7,
             'hostNames' => ['wearesho.com',],
-        ]) extends V3\Yii2\Behavior
+        ]) extends ReCaptcha\V3\Yii2\Behavior
         {
             protected function validationError(ReCaptcha\V3\Response $response, int $code): void
             {
@@ -465,6 +475,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -490,7 +501,7 @@ class BehaviorTest extends TestCase
             'min' => 0.5,
             'max' => 0.7,
             'hostNames' => ['wearesho.com',],
-        ]) extends V3\Yii2\Behavior
+        ]) extends ReCaptcha\V3\Yii2\Behavior
         {
             protected function validationError(ReCaptcha\V3\Response $response, int $code): void
             {
@@ -510,6 +521,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -535,7 +547,7 @@ class BehaviorTest extends TestCase
             'min' => 0.5,
             'max' => 0.7,
             'hostNames' => ['wearesho.com',],
-        ]) extends V3\Yii2\Behavior
+        ]) extends ReCaptcha\V3\Yii2\Behavior
         {
             protected function notSuccessful(ReCaptcha\V3\Exception $exception): void
             {
@@ -555,6 +567,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
@@ -580,7 +593,7 @@ class BehaviorTest extends TestCase
             'min' => 0.5,
             'max' => 0.7,
             'hostNames' => ['wearesho.com',],
-        ]) extends V3\Yii2\Behavior
+        ]) extends ReCaptcha\V3\Yii2\Behavior
         {
             protected function validationError(ReCaptcha\V3\Response $response, int $code): void
             {
@@ -600,6 +613,7 @@ class BehaviorTest extends TestCase
             ]))
         );
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
             new base\ActionEvent(new base\Action(
                 'login',
