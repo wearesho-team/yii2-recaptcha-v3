@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wearesho\ReCaptcha\V3\Yii2;
 
 use yii\base;
