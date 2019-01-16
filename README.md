@@ -1,4 +1,6 @@
 # reCAPTCHA v3 integration (Yii2)
+[![Build Status](https://travis-ci.org/wearesho-team/yii2-recaptcha-v3.svg?branch=master)](https://travis-ci.org/wearesho-team/yii2-recaptcha-v3)
+[![codecov](https://codecov.io/gh/wearesho-team/yii2-recaptcha-v3/branch/master/graph/badge.svg)](https://codecov.io/gh/wearesho-team/yii2-recaptcha-v3)
 
 This module provides behavior, validator and bootstrap to connection reCAPTCHA to Yii2 Application.
 
