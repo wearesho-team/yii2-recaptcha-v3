@@ -2,8 +2,9 @@
 
 namespace Wearesho\ReCaptcha\V3\Yii2\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use Wearesho\ReCaptcha\V3;
-use yii\phpunit\TestCase;
+use yii\console\Application;
 
 /**
  * Class BootstrapTest
@@ -11,9 +12,15 @@ use yii\phpunit\TestCase;
  */
 class BootstrapTest extends TestCase
 {
+    /** @var Application */
+    protected $app;
+
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->app = new Application([
+            'id' => 'yii2-recaptcha-v3',
+            'basePath' => dirname(dirname(__DIR__)),
+        ]);
 
         (new V3\Yii2\Bootstrap())->bootstrap($this->app);
     }
