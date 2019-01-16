@@ -61,7 +61,7 @@ class ValidatorTest extends TestCase
 
         $this->assertEquals($validator->client, \Yii::$container->get(V3\Client::class));
         $this->assertEquals($validator->request, \Yii::$app->request);
-        $this->assertEquals($validator->message, 'Рекапча не пройдена');
+        $this->assertEquals($validator->message, 'Проверка reCAPTCHA не пройдена');
         $this->assertEquals($validator->errorMessage, 'Error while passing reCAPTCHA challange');
     }
 
@@ -72,7 +72,7 @@ class ValidatorTest extends TestCase
         ]);
         $this->assertEquals($validator->client, \Yii::$container->get(V3\Client::class));
         $this->assertNull($validator->request);
-        $this->assertEquals($validator->message, 'Рекапча не пройдена');
+        $this->assertEquals($validator->message, 'Проверка reCAPTCHA не пройдена');
         $this->assertEquals($validator->errorMessage, 'Error while passing reCAPTCHA challange');
     }
 
