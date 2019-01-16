@@ -216,4 +216,9 @@ class ValidatorTest extends TestCase
 
         return $validator;
     }
+
+    protected function tearDown(): void
+    {
+        putenv('RECAPTCHA_SECRET');
+    }
 }
