@@ -93,7 +93,11 @@ In this example behavior will check for `X-ReCaptcha-Token` header before `login
 If header is missing or it's value invalid `\yii\web\BadRequestHttpException` will be threw.
 See [Behavior](./src/Behavior.php) source code for code details and property docs.
 
-*Note: `Behavior::actions` property works different way compared to `Validator`* 
+When checking reCAPTCHA response `action` attribute will be used current controller ID, action ID and request method:
+`controller-action-method`
+(example: `login-index-post`, where `login` is controller ID, `index` is action ID and `post` is request method).
+
+*Note: `Behavior::actions` property works different way compared to `Validator`*
 
 ## Contributors
 - [Alexander Letnikow](mailto:reclamme@gmail.com)
