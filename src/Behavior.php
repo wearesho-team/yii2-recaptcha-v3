@@ -110,7 +110,7 @@ class Behavior extends base\Behavior
     public function beforeAction(base\ActionEvent $event): void
     {
         if (!is_null($this->actions)) {
-            $actionMatches = isset($this->actions[$event->action->id]);
+            $actionMatches = array_key_exists($event->action->id, $this->actions ?? []);
             if (!$actionMatches) {
                 return;
             }
