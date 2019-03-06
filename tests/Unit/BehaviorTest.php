@@ -19,13 +19,16 @@ class BehaviorTest extends TestCase
     /** @var GuzzleHttp\Handler\MockHandler */
     protected $mock;
 
+    /** @var array */
+    protected $container;
+
     protected function setUp(): void
     {
         putenv('RECAPTCHA_SECRET=' . static::SECRET);
 
-        $container = [];
+        $this->container = [];
         $this->mock = new GuzzleHttp\Handler\MockHandler();
-        $history = GuzzleHttp\Middleware::history($container);
+        $history = GuzzleHttp\Middleware::history($this->container);
         $stack = new GuzzleHttp\HandlerStack($this->mock);
         $stack->push($history);
 
@@ -47,11 +50,9 @@ class BehaviorTest extends TestCase
     public function testSuccessBehavior(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -78,18 +79,13 @@ class BehaviorTest extends TestCase
             ))
         );
 
-        $this->assertEquals(
-            [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
-            $behavior->events()
-        );
+        $this->assertNotEmpty($this->container);
     }
 
     public function testEmptyActions(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'min' => 0.5,
             'max' => 1,
             'hostNames' => ['wearesho.com',],
@@ -115,20 +111,15 @@ class BehaviorTest extends TestCase
             ))
         );
 
-        $this->assertEquals(
-            [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
-            $behavior->events()
-        );
+        $this->assertNotEmpty($this->container);
     }
 
     public function testEmptyToken(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -161,11 +152,9 @@ class BehaviorTest extends TestCase
     public function testTooLow(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -200,11 +189,9 @@ class BehaviorTest extends TestCase
     public function testNotVerify(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -239,11 +226,9 @@ class BehaviorTest extends TestCase
     public function testInvalidHostName(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -278,11 +263,9 @@ class BehaviorTest extends TestCase
     public function testInvalidAction(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -317,11 +300,9 @@ class BehaviorTest extends TestCase
     public function testTooHigh(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 0.7,
@@ -356,11 +337,9 @@ class BehaviorTest extends TestCase
     public function testExtendedEmptyToken(): void
     {
         $behavior = new class([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -373,15 +352,26 @@ class BehaviorTest extends TestCase
             }
         };
 
-        $this->mock->append(
-            new GuzzleHttp\Psr7\Response(200, [], json_encode([
-                'success' => true,
-                'score' => 0.6,
-                'action' => 'id-controller-login-get',
-                'challenge_ts' => date('c'),
-                'hostname' => 'wearesho.com',
-            ]))
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $behavior->beforeAction(
+            new base\ActionEvent(new base\Action(
+                'login',
+                new base\Controller('id-controller', new base\Module('id-module'))
+            ))
         );
+
+        $this->assertEmpty($this->container);
+    }
+
+    public function testActionsNotMatched(): void
+    {
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
+            'request' => $request = new web\Request(),
+            'min' => 0.5,
+            'actions' => ['post'],
+            'max' => 1,
+            'hostNames' => ['wearesho.com',],
+        ]);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $behavior->beforeAction(
@@ -391,20 +381,40 @@ class BehaviorTest extends TestCase
             ))
         );
 
-        $this->assertEquals(
-            [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
-            $behavior->events()
+        $this->assertEmpty($this->container);
+    }
+
+    public function testMethodsNotMatched(): void
+    {
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
+            'request' => $request = new web\Request(),
+            'min' => 0.5,
+            'actions' => [
+                'login' => [
+                    'post',
+                ]
+            ],
+            'max' => 1,
+            'hostNames' => ['wearesho.com',],
+        ]);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $behavior->beforeAction(
+            new base\ActionEvent(new base\Action(
+                'login',
+                new base\Controller('id-controller', new base\Module('id-module'))
+            ))
         );
+
+        $this->assertEmpty($this->container);
     }
 
     public function testExtendedTooLow(): void
     {
         $behavior = new class([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 1,
@@ -437,20 +447,15 @@ class BehaviorTest extends TestCase
             ))
         );
 
-        $this->assertEquals(
-            [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
-            $behavior->events()
-        );
+        $this->assertNotEmpty($this->container);
     }
 
     public function testExtendedTooHigh(): void
     {
         $behavior = new class([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 0.7,
@@ -483,20 +488,15 @@ class BehaviorTest extends TestCase
             ))
         );
 
-        $this->assertEquals(
-            [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
-            $behavior->events()
-        );
+        $this->assertNotEmpty($this->container);
     }
 
     public function testExtendedInvalidHostName(): void
     {
         $behavior = new class([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 0.7,
@@ -529,20 +529,15 @@ class BehaviorTest extends TestCase
             ))
         );
 
-        $this->assertEquals(
-            [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
-            $behavior->events()
-        );
+        $this->assertNotEmpty($this->container);
     }
 
     public function testExtendedNotVerify(): void
     {
         $behavior = new class([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 0.7,
@@ -575,20 +570,15 @@ class BehaviorTest extends TestCase
             ))
         );
 
-        $this->assertEquals(
-            [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
-            $behavior->events()
-        );
+        $this->assertNotEmpty($this->container);
     }
 
     public function testExtendedInvalidAction(): void
     {
         $behavior = new class([
-            'request' => $request = new web\Request([
-                'methodParam' => 'get_method'
-            ]),
+            'request' => $request = new web\Request(),
             'actions' => [
-                'login' => ['post'],
+                'login' => ['get'],
             ],
             'min' => 0.5,
             'max' => 0.7,
@@ -621,6 +611,20 @@ class BehaviorTest extends TestCase
             ))
         );
 
+        $this->assertNotEmpty($this->container);
+    }
+
+    public function testEvents(): void
+    {
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
+            'request' => $request = new web\Request(),
+            'actions' => [
+                'login' => ['get'],
+            ],
+            'min' => 0.5,
+            'max' => 1,
+            'hostNames' => ['wearesho.com',],
+        ]);
         $this->assertEquals(
             [web\Application::EVENT_BEFORE_ACTION => 'beforeAction'],
             $behavior->events()
