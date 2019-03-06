@@ -109,10 +109,14 @@ class Behavior extends base\Behavior
      */
     public function beforeAction(base\ActionEvent $event): void
     {
-        if (is_null($this->actions)) {
-            if (!in_array($event->action->id, array_keys($this->actions ?? []))
-                || !in_array(strtolower($this->request->method), $this->actions[$event->action->id])
-            ) {
+        if (!is_null($this->actions)) {
+            $actionMatches = isset($this->actions[$event->action->id]);
+            if (!$actionMatches) {
+                return;
+            }
+
+            $methodMatches = in_array(strtolower($this->request->method), $this->actions[$event->action->id]);
+            if (!$methodMatches) {
                 return;
             }
         }
