@@ -65,7 +65,7 @@ class BehaviorTest extends TestCase
             new GuzzleHttp\Psr7\Response(200, [], json_encode([
                 'success' => true,
                 'score' => 0.6,
-                'action' => 'id-controller-login-get',
+                'action' => 'idcontrollerloginget',
                 'challenge_ts' => date('c'),
                 'hostname' => 'wearesho.com',
             ]))
@@ -97,7 +97,7 @@ class BehaviorTest extends TestCase
             new GuzzleHttp\Psr7\Response(200, [], json_encode([
                 'success' => true,
                 'score' => 0.6,
-                'action' => 'id-controller-login-get',
+                'action' => 'idcontrollerloginget',
                 'challenge_ts' => date('c'),
                 'hostname' => 'wearesho.com',
             ]))

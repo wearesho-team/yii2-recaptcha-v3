@@ -147,9 +147,10 @@ class Behavior extends base\Behavior
             return;
         }
 
-        $needleCaptchaAction = mb_strtolower(
-            "{$event->action->controller->id}-{$event->action->id}-{$this->request->method}"
-        );
+        $needleCaptchaAction = preg_replace('/[^\w]/', '', mb_strtolower(
+            "{$event->action->controller->id}{$event->action->id}{$this->request->method}"
+        ));
+
         if ($needleCaptchaAction !== $response->getAction()) {
             $this->invalidAction($response);
             return;
