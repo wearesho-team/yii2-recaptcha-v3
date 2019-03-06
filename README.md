@@ -94,13 +94,13 @@ If header is missing or it's value invalid `\yii\web\BadRequestHttpException` wi
 See [Behavior](./src/Behavior.php) source code for code details and property docs.
 
 When checking reCAPTCHA response `action` attribute will be used current controller ID, action ID and request method:
-`controller-action-method`
-(example: `login-index-post`, where `login` is controller ID, `index` is action ID and `post` is request method).
+`controlleractionmethod`, without dividers. Example: `loginindexpost`, where `login` is controller ID, `index` is action ID and `post` is request method).
 
 *Note: `Behavior::actions` property works different way compared to `Validator`*
 
 ## Contributors
 - [Alexander Letnikow](mailto:reclamme@gmail.com)
+- [Alexander Yagich](mailto:aleksa.yagich@gmail.com)
 
 
 ## License
