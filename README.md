@@ -12,6 +12,15 @@ composer require wearesho-team/yii2-recaptcha-v3:^1.0.0
 
 ## Usage
 
+### Configuration
+To configure current reCAPTCHA environment (will be used in [Behavior](./src/Behavior.php)) you have to use
+[ConfigInterface](./src/ConfigInterface). 
+
+#### Environment Configuration
+| Key                      | Required | Format  | Description                  |
+|--------------------------|----------|---------|------------------------------|
+| RECAPTCHA_ENVIRONMENT    | -        | string  | YII_ENV will be used default |
+
 ### Bootstrap
 ```php
 <?php
@@ -25,6 +34,7 @@ return [
         'reCaptcha' => [
             'class' => ReCaptcha\V3\Yii2\Bootstrap::class,
             'config' => ReCaptcha\V3\EnvironmentConfig::class, // or another config interface implementation
+            'yiiConfig' => ReCaptcha\V3\Yii2\EnvironmentConfig::class, // will be used for environment checking
         ],
         // another bootstraps      
     ],
