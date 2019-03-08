@@ -47,6 +47,75 @@ class BehaviorTest extends TestCase
         );
     }
 
+    public function testEnvironmentNotMatch(): void
+    {
+        $client = $this->createMock(ReCaptcha\V3\Client::class);
+
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
+            'client' => $client,
+            'request' => $request = new web\Request(),
+            'actions' => [
+                'login' => ['get'],
+            ],
+            'min' => 0.5,
+            'max' => 1,
+            'hostNames' => ['wearesho.com',],
+            'config' => [
+                'class' => ReCaptcha\V3\Yii2\Config::class,
+                'environment' => 'test-case',
+            ],
+            'environments' => ['prod',],
+        ]);
+
+        $client->expects($this->never())
+            ->method('verify');
+
+        // exception will be throws if environment match
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $behavior->beforeAction(
+            new base\ActionEvent(new base\Action(
+                'login',
+                new base\Controller('id-controller', new base\Module('id-module'))
+            ))
+        );
+    }
+
+    public function testEnvironmentMatch(): void
+    {
+        $client = $this->createMock(ReCaptcha\V3\Client::class);
+
+        $behavior = new ReCaptcha\V3\Yii2\Behavior([
+            'client' => $client,
+            'request' => $request = new web\Request(),
+            'min' => 0.5,
+            'config' => [
+                'class' => ReCaptcha\V3\Yii2\Config::class,
+                'environment' => 'test-case',
+            ],
+            'environments' => ['test-case',],
+        ]);
+
+        $request->headers->set('X-ReCaptcha-Token', static::SECRET);
+
+        $client->expects($this->once())
+            ->method('verify')
+            ->willReturn(new ReCaptcha\V3\Response(
+                0.6,
+                'idcontrollerloginget',
+                new \DateTime,
+                'localhost'
+            ));
+
+        // exception will be throws if environment match
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $behavior->beforeAction(
+            new base\ActionEvent(new base\Action(
+                'login',
+                new base\Controller('id-controller', new base\Module('id-module'))
+            ))
+        );
+    }
+
     public function testSuccessBehavior(): void
     {
         $behavior = new ReCaptcha\V3\Yii2\Behavior([
