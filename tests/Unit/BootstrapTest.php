@@ -4,7 +4,7 @@ namespace Wearesho\ReCaptcha\V3\Yii2\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Wearesho\ReCaptcha\V3;
-use yii\console\Application;
+use yii\console;
 
 /**
  * Class BootstrapTest
@@ -12,25 +12,32 @@ use yii\console\Application;
  */
 class BootstrapTest extends TestCase
 {
-    /** @var Application */
+    /** @var console\Application */
     protected $app;
 
     protected function setUp(): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->app = new Application([
-            'id' => 'yii2-recaptcha-v3',
-            'basePath' => dirname(dirname(__DIR__)),
-        ]);
+        $this->app = $this->createMock(console\Application::class);
 
         (new V3\Yii2\Bootstrap())->bootstrap($this->app);
     }
+
     public function testContainerOnRecaptchaConfig(): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->assertEquals(
             \Yii::$container->get(V3\ConfigInterface::class),
             new V3\EnvironmentConfig()
+        );
+    }
+
+    public function testContainerOnRecaptchaYiiConfig(): void
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->assertEquals(
+            \Yii::$container->get(V3\Yii2\ConfigInterface::class),
+            new V3\Yii2\EnvironmentConfig()
         );
     }
 }
