@@ -92,6 +92,7 @@ class Controller extends web\Controller
                 'min' => 0.5,
                 'max' => 1,
                 'hostNames' => ['wearesho.com',],
+                'environments' => ['prod',],
             ],      
         ];
     }
@@ -99,6 +100,9 @@ class Controller extends web\Controller
     // controller code
 }
 ```
+If `environments` property specified, environment check will be performed before others.
+See [configuration](#configuration) section for environment configuring details.
+
 In this example behavior will check for `X-ReCaptcha-Token` header before `login` action (only in case of POST action).
 If header is missing or it's value invalid `\yii\web\BadRequestHttpException` will be threw.
 See [Behavior](./src/Behavior.php) source code for code details and property docs.
