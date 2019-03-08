@@ -5,6 +5,7 @@
     "require": {
         "php": "^7.1",
         "ext-mbstring": "*",
+        "horat1us/yii2-environment-config": "^1.0",
         "wearesho-team/recaptcha-v3": "^0.2.0",
         "yiisoft/yii2": "^2.0.15"
     },
