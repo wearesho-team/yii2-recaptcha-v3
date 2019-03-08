@@ -18,14 +18,19 @@ class Bootstrap implements base\BootstrapInterface
         'class' => ReCaptcha\V3\EnvironmentConfig::class,
     ];
 
+    /** @var array|string|ConfigInterface */
+    public $yiiConfig = [
+        'class' => EnvironmentConfig::class,
+    ];
+
     /**
      * @inheritdoc
      */
     public function bootstrap($app): void
     {
-        \Yii::$container->setSingleton(
-            ReCaptcha\V3\ConfigInterface::class,
-            $this->config
-        );
+        \Yii::$container->setDefinitions([
+            ReCaptcha\V3\ConfigInterface::class => $this->config,
+            ConfigInterface::class => $this->yiiConfig,
+        ]);
     }
 }
