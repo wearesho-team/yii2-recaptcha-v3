@@ -33,6 +33,15 @@ class Behavior extends base\Behavior
     ];
 
     /**
+     * Will be used to compare environment
+     * @see environments
+     * @var array|string|ConfigInterface
+     */
+    public $config = [
+        'class' => ConfigInterface::class,
+    ];
+
+    /**
      * Request will be used to fetch reCAPTCHA token from headers
      * @var array|string|web\Request
      */
@@ -85,6 +94,14 @@ class Behavior extends base\Behavior
     public $actions = null;
 
     /**
+     * Environments to check.
+     * If set to null all environments will be checked.
+     * @see ConfigInterface
+     * @var null
+     */
+    public $environments = null;
+
+    /**
      * @throws base\InvalidConfigException
      */
     public function init(): void
@@ -92,6 +109,9 @@ class Behavior extends base\Behavior
         parent::init();
         $this->client = di\Instance::ensure($this->client, ReCaptcha\V3\Client::class);
         $this->request = di\Instance::ensure($this->request, web\Request::class);
+        if (!is_null($this->environments)) {
+            $this->config = di\Instance::ensure($this->config, ConfigInterface::class);
+        }
     }
 
     public function events(): array
@@ -109,6 +129,10 @@ class Behavior extends base\Behavior
      */
     public function beforeAction(base\ActionEvent $event): void
     {
+        if (!$this->matchEnvironment()) {
+            return;
+        }
+
         if (!is_null($this->actions)) {
             $actionMatches = array_key_exists($event->action->id, $this->actions ?? []);
             if (!$actionMatches) {
@@ -155,6 +179,22 @@ class Behavior extends base\Behavior
             $this->invalidAction($response);
             return;
         }
+    }
+
+    protected function matchEnvironment(): bool
+    {
+        if (is_null($this->environments)) {
+            return true;
+        }
+
+        $currentEnvironment = $this->config->getEnvironment();
+        foreach ($this->environments as $environment) {
+            if ($environment === $currentEnvironment) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
