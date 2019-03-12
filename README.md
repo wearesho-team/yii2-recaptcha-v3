@@ -7,7 +7,7 @@ This module provides behavior, validator and bootstrap to connection reCAPTCHA t
 ## Installation
 
 ```bash
-composer require wearesho-team/yii2-recaptcha-v3:^1.0.0
+composer require wearesho-team/yii2-recaptcha-v3:^1.1
 ```
 
 ## Usage
